@@ -1,0 +1,73 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserDemoDAO">
+    <resultMap id="result" type="UsersDemo">
+        <result property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="time" column="TIME"/>
+
+    </resultMap>
+
+    <select id="selList" parameterType="UsersDemo" resultType="UsersDemo">
+        WITH LIST AS (
+        SELECT
+        ROW_NUMBER() OVER(ORDER BY SA.ID) AS RNK
+        ,COUNT(*) OVER() AS RECORDS
+        ,SA.ID As ID
+        , SA.NAME AS NAME
+        , SA.PASSWORD AS PASSWORD
+        , SA.TIME AS TIME
+        FROM USERSDEMO SA
+
+        WHERE 1=1
+        <if test='id !=null and id !="" '>
+            AND UPPER(SA.ID) like upper ('%' || #{id}} || '%')
+        </if>
+        <if test='name !=null and name !="" '>
+            AND UPPER(SA.NAME) like upper ('%' || #{name}} || '%')
+        </if>
+        <if test='password !=null and password !="" '>
+            AND UPPER(SA.PASSWORD) like upper ('%' || #{password} || '%')
+        </if>
+        <if test='time !=null and time !="" '>
+            AND UPPER(SA.PASSWORD) like upper ('%' || REPLACE( #{time}), '-' || '%')
+        </if>
+        )
+
+        -- SELECT *FROM LIST
+
+        SELECT LT.*
+        <if test="rows !=0 or page!=0">
+            , (LT.RECORDS-LT.RNK +1) AS ROWSEQ
+            , FLOOR((LT.RECORDS-1)/#{rows})+1 AS TOTAL
+        </if>
+
+        FROM LIST AS LT
+        <if test="rows !=0 or page!=0">
+            WHERE LT.RNK BETWEEN (#{page}-1)* #{rows} + 1 AND #{page}*#{rows}
+        </if>
+        ORDER BY ID
+
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="result">
+        SELECT * FROM USERSDEMO WHERE ID = #{id};
+    </select>
+
+    <!--    <insert id="add" parameterType="UsersDemo">-->
+    <!--        insert into usersdemo (name, password) values(#{name}, #{password});-->
+    <!--    </insert>-->
+
+    <!--    <update id="update"  parameterType="UsersDemo">-->
+    <!--        update usersdemo set name=#{name}, password=#{password} where id=#{id};-->
+    <!--    </update>-->
+
+    <!--    <delete id="delete" parameterType="long" >-->
+    <!--        delete from usersdemo where id=#{id};-->
+    <!--    </delete>-->
+
+
+</mapper>
+
