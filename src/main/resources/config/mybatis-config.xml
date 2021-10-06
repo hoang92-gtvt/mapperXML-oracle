@@ -7,8 +7,9 @@
         <package name="com.example.mapperxml"/>
     </typeAliases>
 
-    <!--    <mappers>-->
-    <!--        <mapper resource = "mybatis/Student.xml"/>-->
-    <!--    </mappers>-->
+<!--        <mappers >-->
+<!--            <mapper url = "mybatis/Student.xml"/>-->
+<!--        </mappers>-->
+
 
 </configuration>

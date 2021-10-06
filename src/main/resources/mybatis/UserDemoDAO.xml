@@ -16,17 +16,17 @@
         ROW_NUMBER() OVER(ORDER BY SA.ID) AS RNK
         ,COUNT(*) OVER() AS RECORDS
         ,SA.ID As ID
-        , SA.NAME AS NAME
-        , SA.PASSWORD AS PASSWORD
-        , SA.TIME AS TIME
+        ,SA.NAME AS NAME
+        ,SA.PASSWORD AS PASSWORD
+        ,SA.TIME AS TIME
         FROM USERSDEMO SA
 
         WHERE 1=1
-        <if test='id !=null and id !="" '>
-            AND UPPER(SA.ID) like upper ('%' || #{id}} || '%')
+        <if test='id !=null and id !=0 '>
+            AND UPPER(SA.ID) like upper ('%' || #{id} || '%')
         </if>
         <if test='name !=null and name !="" '>
-            AND UPPER(SA.NAME) like upper ('%' || #{name}} || '%')
+            AND UPPER(SA.NAME) like upper ('%' || #{name} || '%')
         </if>
         <if test='password !=null and password !="" '>
             AND UPPER(SA.PASSWORD) like upper ('%' || #{password} || '%')
@@ -36,24 +36,23 @@
         </if>
         )
 
-        -- SELECT *FROM LIST
 
-        SELECT LT.*
+        SELECT LIST.*
         <if test="rows !=0 or page!=0">
-            , (LT.RECORDS-LT.RNK +1) AS ROWSEQ
-            , FLOOR((LT.RECORDS-1)/#{rows})+1 AS TOTAL
+            ,(LIST.RECORDS-LIST.RNK + 1 ) AS ROWSEQ
+            ,FLOOR((LIST.RECORDS - 1)/#{rows}) + 1 AS TOTAL
         </if>
 
-        FROM LIST AS LT
+        FROM LIST
         <if test="rows !=0 or page!=0">
-            WHERE LT.RNK BETWEEN (#{page}-1)* #{rows} + 1 AND #{page}*#{rows}
+            WHERE LIST.RNK BETWEEN (#{page}-1) * #{rows} + 1 AND #{page} * #{rows}
         </if>
         ORDER BY ID
 
     </select>
 
     <select id="findById" parameterType="long" resultMap="result">
-        SELECT * FROM USERSDEMO WHERE ID = #{id};
+        SELECT * FROM USERSDEMO WHERE ID = #{id}
     </select>
 
     <!--    <insert id="add" parameterType="UsersDemo">-->

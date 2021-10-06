@@ -5,6 +5,9 @@ import com.example.mapperxml.userdemo.dao.UserDemoDAO;
 import com.example.mapperxml.userdemo.service.IUserDemoService;
 import com.example.mapperxml.userdemo.svo.UsersDemo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,4 +33,11 @@ public class UserServiceImpl implements IUserDemoService {
     public UsersDemo getOne(String paramString) {
         return null;
     }
+
+//
+//    private List<NCCommonSVO>getElementOfViews(UsersDemo param, List<NCCommonSVO> resutlFromDatabase){
+//
+//
+//    }
+
 }
